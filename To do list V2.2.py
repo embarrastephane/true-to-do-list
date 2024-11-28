@@ -1,77 +1,67 @@
-high_task = []
-casual_task = []
-tasks_list = high_task + casual_task # La liste vide dans laquelle se trouvera toutes nos taches
+tasks_list = []  # La liste vide dans laquelle se trouveront toutes nos tâches
 
-def update_tasks_list():
-    global tasks_list
-    tasks_list = high_task + casual_task
+def add_task():#fonction pour ajouter une tache avec une priorité
+    task = input("Veuillez ajouter la tâche : ")#tache entrer par l'utilisateur
+    priority = int(input("Priorité de la tâche (1 pour prioritaire, 2 pour secondaire) : "))#priorité de cette tache
+    tasks_list.append((priority, task))#ajout de cette tache en tenant compte de la priorité en allant du  bas vers le haut grace à la fonction append
+    print(f'La tâche "{task}" avec priorité {priority} a été ajoutée à la liste')#output utilisateur pour la confirmation d'ajout
 
-print("Liste de choses à faire")
+def display_tasks():#Affichage de la liste de tache avec les priorités
+    if not tasks_list:#s'il n ya pas de liste
+        print("Il n'y a pas de liste disponible pour le moment, créez-en une 👍")#Output utilisateur retour au menu
+    else:#au cas contraire
+        print("Voici votre liste de choses à faire avec priorités :")#Texte à afficher
+        for index, (priority, task) in enumerate(tasks_list, start=1):#Pour le nombre d'élément présent dans la liste, effectuer un boucle pour les énumérer
+            print(f"{index}. Priorité: {priority} {task}")
 
-def add_task():
-    print("1-Important")
-    print("2-Secondaire")
-    importance=int(input("Priorité de la tache 1/2:"))
-    if importance==1:
-        task = input("Veuillez entrer une tâche prioritaire : ")
-        high_task.append(task)
-        print(f'La tâche "{task}" a été ajoutée à la liste')
-        update_tasks_list()
-    elif importance==2:
-        task = input("Veuillez entrer une tâche secondaire : ")
-        casual_task.append(task)
-        print(f'La tâche "{task}" a été ajoutée à la liste')
-        update_tasks_list()
-    else:
-        print("Option non valide")
+def sort_tasks(order="asc"):
+    """Trier les tâches par ordre de priorité croissant ou décroissant."""
+    tasks_list.sort(key=lambda x: x[0], reverse=(order == "desc"))
+    order_str = "décroissant" if order == "desc" else "croissant"
+    print(f"Les tâches ont été triées par ordre {order_str}.")
+
 def delete_task():
+    """Supprimer une tâche par son nom."""
     task_to_delete = input("Entrer la tâche à supprimer : ")
-    try:
-        if task_to_delete in high_task:
-            high_task.remove(task_to_delete)
-        elif task_to_delete in casual_task:
-            casual_task.remove(task_to_delete)
-        else:
-            raise ValueError
-        print(f'La tâche "{task_to_delete}" a été supprimée')
-        update_tasks_list()
-    except ValueError:
-        print("Cette tâche n'existe pas")
+    for task in tasks_list:
+        if task[1] == task_to_delete:
+            tasks_list.remove(task)
+            print(f'La tâche "{task_to_delete}" a été supprimée')
+            return
+    print("Cette tâche n'existe pas dans la liste")
 
-def research_task():
-    task_to_research = input("Entrer la tâche que vous cherchez : ")
-    if task_to_research in tasks_list:
-        print(f'{task_to_research} est présent dans la liste')
-    else:
-        print("L'élément n'est pas présent dans la liste")
+def search_task():
+    """Rechercher une tâche par son nom."""
+    task_to_search = input("Entrer la tâche que vous cherchez : ")
+    for priority, task in tasks_list:
+        if task == task_to_search:
+            print(f'{task_to_search} est présente dans la liste avec priorité {priority}')
+            return
+    print("L'élément n'est pas présent dans la liste")
 
-def list_of_tasks():
-    if not tasks_list:
-        print("Il n'y a pas de liste disponible pour le moment, créez-en une 👍")
-    else:
-        print("Voici votre liste de choses à faire :")
-        for index, task in enumerate(tasks_list, start=1):
-            print(f"{index} - {task}")
-
-while True: # Boucle qui fait tourner le programme
-    print("Menu principal")
-    print()
-    print("1 - Ajouter une tâche") # Différentes options
-    print("2 - Afficher la liste") # Différentes options
-    print("3 - Supprimer une tâche") # Différentes options
-    print("4 - Recherche de tâche") # Différentes options
-    print("5 - Quitter le menu") # Différentes options
-    option = input("Veuillez choisir une option : ") # Choix de l'utilisateur
+while True:  # Boucle qui fait tourner le programme
+    print("\nMenu principal")
+    print("1 - Ajouter une tâche")
+    print("2 - Afficher la liste des tâches")
+    print("3 - Trier les tâches")
+    print("4 - Supprimer une tâche")
+    print("5 - Rechercher une tâche")
+    print("6 - Quitter le menu")
+    
+    option = input("Veuillez choisir une option : ")
 
     if option == "1":
         add_task()
     elif option == "2":
-        list_of_tasks()
+        display_tasks()
     elif option == "3":
-        delete_task()
+        order = input("Choisissez l'ordre de tri (asc pour croissant, desc pour décroissant) : ")
+        sort_tasks(order)
     elif option == "4":
-        research_task()
+        delete_task()
     elif option == "5":
+        search_task()
+    elif option == "6":
         print("Bye bye👌👋")
         break
     else:
