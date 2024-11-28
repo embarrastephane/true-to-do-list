@@ -12,57 +12,45 @@ def display_tasks():#Affichage de la liste de tache avec les priorités
     else:#au cas contraire
         print("Voici votre liste de choses à faire avec priorités :")#Texte à afficher
         for index, (priority, task) in enumerate(tasks_list, start=1):#Pour le nombre d'élément présent dans la liste, effectuer un boucle pour les énumérer
-            print(f"{index}. Priorité: {priority} {task}")
+            print(f"{index}- Priorité: {priority} {task}")#afficher l'index de l'élément suivi de sa priorité puis de la tache en elle meme ex: 1- priorité:1 Reviser
 
-def sort_tasks(order="asc"):
-    """Trier les tâches par ordre de priorité croissant ou décroissant."""
-    tasks_list.sort(key=lambda x: x[0], reverse=(order == "desc"))
-    order_str = "décroissant" if order == "desc" else "croissant"
-    print(f"Les tâches ont été triées par ordre {order_str}.")
+def delete_task():#Supprimer une tâche par son nom.
+    task_to_delete = input("Entrer la tâche à supprimer : ")#l'utilisateur saisi la tache à supprimer
+    for task in tasks_list:#En considérant toutes les taches de la liste
+        if task[1] == task_to_delete:#Si une tache correspond à la tache à supprimer
+            tasks_list.remove(task)#Retiter cet élément de la liste de tache
+            print(f'La tâche "{task_to_delete}" a été supprimée')#affichage texte
+            return#au cas contraire
+    print("Cette tâche n'existe pas dans la liste")#affichage ceci
 
-def delete_task():
-    """Supprimer une tâche par son nom."""
-    task_to_delete = input("Entrer la tâche à supprimer : ")
-    for task in tasks_list:
-        if task[1] == task_to_delete:
-            tasks_list.remove(task)
-            print(f'La tâche "{task_to_delete}" a été supprimée')
-            return
-    print("Cette tâche n'existe pas dans la liste")
-
-def search_task():
-    """Rechercher une tâche par son nom."""
-    task_to_search = input("Entrer la tâche que vous cherchez : ")
-    for priority, task in tasks_list:
-        if task == task_to_search:
-            print(f'{task_to_search} est présente dans la liste avec priorité {priority}')
-            return
-    print("L'élément n'est pas présent dans la liste")
+def search_task():#fonction pour rechercher une tache par son nom
+    task_to_search = input("Entrer la tâche que vous cherchez : ")#l'utilisateur dois saisir le nom de la tache à supprimer
+    for priority, task in tasks_list:#pour toutes les tache qu'importe leur priorité
+        if task == task_to_search:#Si la tache est présente dans la liste
+            print(f'{task_to_search} est présente dans la liste avec priorité {priority}')#Alors confirme sa présence et done sa priorité
+            return#Sinon
+    print("L'élément n'est pas présent dans la liste")#Elément non présent dans la liste
 
 while True:  # Boucle qui fait tourner le programme
     print("\nMenu principal")
-    print("1 - Ajouter une tâche")
-    print("2 - Afficher la liste des tâches")
-    print("3 - Trier les tâches")
-    print("4 - Supprimer une tâche")
-    print("5 - Rechercher une tâche")
-    print("6 - Quitter le menu")
+    print("1 - Ajouter une tâche")#Option du menu principale
+    print("2 - Afficher la liste des tâches")#Option du menu principale
+    print("3 - Supprimer une tâche")#Option du menu principale
+    print("4 - Rechercher une tâche")#Option du menu principale
+    print("5 - Quitter le menu")#Option du menu principale
     
-    option = input("Veuillez choisir une option : ")
+    option = input("Veuillez choisir une option : ")#option choisie par l'utilisateur
 
-    if option == "1":
-        add_task()
-    elif option == "2":
-        display_tasks()
-    elif option == "3":
-        order = input("Choisissez l'ordre de tri (asc pour croissant, desc pour décroissant) : ")
-        sort_tasks(order)
-    elif option == "4":
-        delete_task()
-    elif option == "5":
-        search_task()
-    elif option == "6":
-        print("Bye bye👌👋")
-        break
-    else:
-        print("Option non valide.")
+    if option == "1":#Si l'utilisateur saisi 1
+        add_task()#executer la fonction add_task
+    elif option == "2":#Si l'utilisateur saisi 2
+        display_tasks()#executer la fonction display_task
+    elif option == "3":#Si l'utilisateur saisi 4
+        delete_task()#executer la fonction delete_task
+    elif option == "4":#Si l'utilisateur saisi 5
+        search_task()#executer la fonction search_task
+    elif option == "5":#Si l'utilisateur saisi 6
+        print("Bye bye👌👋")#afficher ce message
+        break#casser la boucle
+    else:#Si l'utilisateur saisi une autre option
+        print("Option non valide.")#afficher ce message
